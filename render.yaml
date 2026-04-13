@@ -1,6 +1,6 @@
 services:
   # ────────────────────────────────────────────
-  # Backend API Service
+  # Backend API
   # ────────────────────────────────────────────
   - type: web
     name: taskflow-backend
@@ -50,4 +50,3 @@ services:
     name: taskflow-db
     plan: free
     region: oregon
-    ipAllowList: []
