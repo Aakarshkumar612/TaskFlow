@@ -1,0 +1,219 @@
+/* Header Styles */
+
+.tf-header {
+  height: 64px;
+  background: var(--dark-bg-panel);
+  border-bottom: 1px solid var(--dark-border-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-6);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+}
+
+.tf-header__left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.tf-header__title {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: 590;
+  color: var(--dark-text-primary);
+  letter-spacing: var(--tracking-slight);
+}
+
+.tf-header__center {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 var(--space-6);
+}
+
+.tf-header__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tf-header__search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.tf-header__search-input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--dark-border-primary);
+  border-radius: var(--radius-md);
+  color: var(--dark-text-primary);
+  font-size: var(--text-sm);
+  font-family: var(--font-sans);
+  transition: all var(--transition-fast);
+}
+
+.tf-header__search-input::placeholder {
+  color: var(--dark-text-tertiary);
+}
+
+.tf-header__search-input:focus {
+  outline: none;
+  border-color: var(--brand-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tf-header__search-kbd {
+  position: absolute;
+  right: 8px;
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--dark-border-primary);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--dark-text-tertiary);
+  font-family: var(--font-mono);
+  pointer-events: none;
+}
+
+.tf-header__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.tf-header__icon-btn {
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--dark-text-secondary);
+  font-size: 20px;
+  cursor: pointer;
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.tf-header__icon-btn:hover {
+  background: var(--dark-bg-hover);
+  color: var(--dark-text-primary);
+}
+
+.tf-header__badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  font-weight: 590;
+  padding: 1px 5px;
+  border-radius: var(--radius-full);
+  min-width: 16px;
+  text-align: center;
+}
+
+.tf-header__user {
+  position: relative;
+}
+
+.tf-header__user-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: none;
+  border: 1px solid var(--dark-border-primary);
+  border-radius: var(--radius-md);
+  padding: 4px 12px 4px 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tf-header__user-btn:hover {
+  background: var(--dark-bg-hover);
+}
+
+.tf-header__user-name {
+  color: var(--dark-text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 510;
+}
+
+.tf-header__user-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 240px;
+  background: var(--dark-bg-surface);
+  border: 1px solid var(--dark-border-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--dark-shadow-elevated);
+  padding: var(--space-3);
+  z-index: var(--z-dropdown);
+  animation: tf-slide-down 150ms ease-out;
+}
+
+@keyframes tf-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tf-header__user-info {
+  padding: var(--space-2);
+}
+
+.tf-header__user-email {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--dark-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tf-header__user-divider {
+  height: 1px;
+  background: var(--dark-border-secondary);
+  margin: var(--space-2) 0;
+}
+
+.tf-header__user-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: 8px;
+  background: none;
+  border: none;
+  color: var(--dark-text-secondary);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+
+.tf-header__user-item:hover {
+  background: var(--dark-bg-hover);
+  color: var(--dark-text-primary);
+}
+
+.tf-header__user-item--danger {
+  color: #ef4444;
+}
+
+.tf-header__user-item--danger:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}

@@ -1,0 +1,102 @@
+/* Tasks Page Styles */
+
+.tf-tasks {
+  padding: var(--space-6);
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.tf-tasks__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+}
+
+.tf-tasks__title {
+  margin: 0;
+  font-size: var(--text-2xl);
+  font-weight: 590;
+  color: var(--dark-text-primary);
+}
+
+.tf-tasks__filters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.tf-tasks__search {
+  flex: 1;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--dark-border-primary);
+  border-radius: var(--radius-md);
+  color: var(--dark-text-primary);
+  font-size: var(--text-sm);
+  font-family: var(--font-sans);
+}
+
+.tf-tasks__search::placeholder {
+  color: var(--dark-text-tertiary);
+}
+
+.tf-tasks__search:focus {
+  outline: none;
+  border-color: var(--brand-primary);
+}
+
+.tf-tasks__status-filters {
+  display: flex;
+  gap: var(--space-1);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--dark-border-primary);
+  border-radius: var(--radius-md);
+  padding: 2px;
+}
+
+.tf-tasks__filter-btn {
+  padding: 6px 12px;
+  background: none;
+  border: none;
+  color: var(--dark-text-tertiary);
+  font-size: var(--text-sm);
+  font-weight: 510;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.tf-tasks__filter-btn.active {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--dark-text-primary);
+}
+
+.tf-tasks__filter-btn:hover:not(.active) {
+  color: var(--dark-text-primary);
+}
+
+.tf-tasks__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tf-tasks__empty {
+  text-align: center;
+  padding: var(--space-16);
+  color: var(--dark-text-tertiary);
+}
+
+.tf-tasks__empty h3 {
+  margin: var(--space-4) 0 var(--space-2);
+  font-size: var(--text-lg);
+  color: var(--dark-text-secondary);
+}
+
+.tf-tasks__empty p {
+  margin: 0;
+  font-size: var(--text-sm);
+}

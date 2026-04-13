@@ -1,0 +1,109 @@
+/* Teams Page Styles */
+
+.tf-teams {
+  padding: var(--space-6);
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.tf-teams__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-8);
+}
+
+.tf-teams__title {
+  margin: 0;
+  font-size: var(--text-2xl);
+  font-weight: 590;
+  color: var(--dark-text-primary);
+}
+
+.tf-teams__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-4);
+}
+
+.tf-teams__card {
+  background: var(--dark-bg-surface);
+  border: 1px solid var(--dark-border-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  transition: all var(--transition-fast);
+}
+
+.tf-teams__card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.tf-teams__card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.tf-teams__card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.tf-teams__card-name {
+  margin: 0 0 4px;
+  font-size: var(--text-base);
+  font-weight: 590;
+  color: var(--dark-text-primary);
+}
+
+.tf-teams__card-desc {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--dark-text-tertiary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tf-teams__card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--dark-border-secondary);
+}
+
+.tf-teams__card-members {
+  font-size: var(--text-sm);
+  color: var(--dark-text-tertiary);
+}
+
+.tf-teams__card-link {
+  color: var(--brand-primary);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  font-weight: 510;
+}
+
+.tf-teams__card-link:hover {
+  text-decoration: underline;
+}
+
+.tf-teams__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.tf-teams__form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--dark-border-secondary);
+}

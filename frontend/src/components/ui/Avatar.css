@@ -1,0 +1,54 @@
+/* Avatar Styles */
+
+.tf-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.tf-avatar__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tf-avatar__initials {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #7170ff 0%, #5e6ad2 100%);
+  color: white;
+  font-weight: 590;
+  font-size: inherit;
+  font-feature-settings: 'cv01', 'ss03';
+}
+
+/* Size-specific font sizes */
+.tf-avatar--xs .tf-avatar__initials { font-size: 10px; }
+.tf-avatar--sm .tf-avatar__initials { font-size: 12px; }
+.tf-avatar--md .tf-avatar__initials { font-size: 14px; }
+.tf-avatar--lg .tf-avatar__initials { font-size: 18px; }
+.tf-avatar--xl .tf-avatar__initials { font-size: 24px; }
+
+.tf-avatar__status {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 25%;
+  height: 25%;
+  min-width: 8px;
+  min-height: 8px;
+  border-radius: 50%;
+  border: 2px solid var(--dark-bg-surface);
+}
+
+.tf-avatar__status--online { background: #27a644; }
+.tf-avatar__status--offline { background: var(--dark-text-tertiary); }
+.tf-avatar__status--busy { background: #ef4444; }
+.tf-avatar__status--away { background: #f59e0b; }

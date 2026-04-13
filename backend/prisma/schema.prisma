@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String   @id @default(cuid())
+  name            String
+  email           String   @unique
+  avatar_url      String?
+  timezone        String   @default("UTC")
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Relations
+  ownedTeams      Team[]
+  ownedProjects   Project[]
+  assignedTasks   Task[]          @relation("TaskAssignee")
+  createdTasks    Task[]          @relation("TaskCreator")
+  comments        Comment[]
+  notifications   Notification[]
+}
+
+model Team {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  owner_id        String
+  visibility      String   @default("public")
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Relations
+  owner           User     @relation(fields: [owner_id], references: [id])
+  projects        Project[]
+
+  // Indexes
+  @@index([owner_id])
+  @@index([created_at])
+}
+
+model Project {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  team_id         String
+  owner_id        String
+  status          String   @default("active")
+  color           String   @default("#7170ff")
+  start_date      String?
+  due_date        String?
+  is_template     Boolean  @default(false)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Relations
+  team            Team     @relation(fields: [team_id], references: [id])
+  owner           User     @relation(fields: [owner_id], references: [id])
+  tasks           Task[]
+  sections        Section[]
+
+  // Indexes
+  @@index([team_id])
+  @@index([owner_id])
+  @@index([status])
+  @@index([created_at])
+}
+
+model Section {
+  id              String   @id @default(cuid())
+  name            String
+  project_id      String
+  position        Int      @default(0)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Relations
+  project         Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  tasks           Task[]
+}
+
+model Task {
+  id              String   @id @default(cuid())
+  title           String
+  description     String?
+  project_id      String
+  section_id      String?
+  assignee_id     String?
+  creator_id      String
+  parent_task_id  String?
+  status          String   @default("todo")
+  priority        String   @default("medium")
+  start_date      String?
+  due_date        String?
+  estimated_hours Float?
+  position        Int      @default(0)
+  tags            String?  @default("[]")
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Relations
+  project         Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  section         Section? @relation(fields: [section_id], references: [id], onDelete: SetNull)
+  assignee        User?    @relation("TaskAssignee", fields: [assignee_id], references: [id], onDelete: SetNull)
+  creator         User     @relation("TaskCreator", fields: [creator_id], references: [id])
+  parentTask      Task?    @relation("TaskSubtasks", fields: [parent_task_id], references: [id], onDelete: Cascade)
+  subtasks        Task[]   @relation("TaskSubtasks")
+  comments        Comment[]
+
+  // Indexes for query performance
+  @@index([project_id])
+  @@index([status])
+  @@index([priority])
+  @@index([assignee_id])
+  @@index([created_at])
+  @@index([project_id, status])
+}
+
+model Comment {
+  id              String   @id @default(cuid())
+  content         String
+  task_id         String
+  user_id         String
+  parent_comment_id String?
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  edited_at       DateTime?
+
+  // Relations
+  task            Task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [user_id], references: [id])
+  parentComment   Comment? @relation("CommentReplies", fields: [parent_comment_id], references: [id], onDelete: Cascade)
+  replies         Comment[] @relation("CommentReplies")
+}
+
+model Notification {
+  id              String   @id @default(cuid())
+  user_id         String
+  type            String
+  message         String
+  metadata        String?  // JSON string
+  is_read         Boolean  @default(false)
+  related_entity_id String?
+  related_entity_type String?
+  created_at      DateTime @default(now())
+
+  // Relations
+  user            User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  // Indexes
+  @@index([user_id])
+  @@index([is_read])
+  @@index([created_at])
+  @@index([user_id, is_read])
+}

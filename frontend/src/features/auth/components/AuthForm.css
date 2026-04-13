@@ -1,0 +1,200 @@
+/* Auth Form Styles - Dark theme for Clerk integration */
+
+.tf-auth {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f1011;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tf-auth__bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #0f1011 0%, #191a1b 100%);
+}
+
+.tf-auth__pattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(113, 112, 255, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.5;
+}
+
+.tf-auth__card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  background: #191a1b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+}
+
+.tf-auth__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #f7f8f8;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.tf-auth__logo-icon {
+  font-size: 24px;
+}
+
+.tf-auth__header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.tf-auth__title {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #f7f8f8;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.tf-auth__subtitle {
+  margin: 0;
+  font-size: 15px;
+  color: #9196a0;
+  line-height: 1.6;
+}
+
+.tf-auth__form {
+  margin-bottom: 24px;
+}
+
+/* Clerk component overrides */
+.tf-auth__form .cl-rootBox {
+  width: 100%;
+}
+
+.tf-auth__form .cl-card {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.tf-auth__form .cl-headerTitle {
+  color: #f7f8f8 !important;
+}
+
+.tf-auth__form .cl-headerSubtitle {
+  color: #9196a0 !important;
+}
+
+.tf-auth__form .cl-formButtonPrimary {
+  background: #7170ff !important;
+}
+
+.tf-auth__form .cl-formButtonPrimary:hover {
+  background: #5f5ee6 !important;
+}
+
+.tf-auth__form .cl-formFieldInput {
+  background: #1e1f20 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #f7f8f8 !important;
+}
+
+.tf-auth__form .cl-formFieldLabel {
+  color: #9196a0 !important;
+}
+
+.tf-auth__form .cl-dividerLine {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.tf-auth__form .cl-socialButtonsBlockButton {
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #f7f8f8 !important;
+}
+
+.tf-auth__form .cl-socialButtonsBlockButtonText {
+  color: #f7f8f8 !important;
+}
+
+.tf-auth__form .cl-formFieldInputGroupText {
+  color: #9196a0 !important;
+}
+
+.tf-auth__form .cl-identityPreview {
+  background: #1e1f20 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.tf-auth__form .cl-identityPreviewText {
+  color: #f7f8f8 !important;
+}
+
+.tf-auth__form .cl-identityPreviewEditButton {
+  color: #7170ff !important;
+}
+
+.tf-auth__form .cl-footerActionText {
+  color: #9196a0 !important;
+}
+
+.tf-auth__form .cl-footerActionLink {
+  color: #7170ff !important;
+}
+
+.tf-auth__form .cl-formResendCodeLink {
+  color: #7170ff !important;
+}
+
+.tf-auth__form .cl-badge {
+  background: rgba(113, 112, 255, 0.2) !important;
+  color: #7170ff !important;
+}
+
+.tf-auth__form .cl-alertText {
+  color: #ef4444 !important;
+}
+
+.tf-auth__form .cl-formFieldErrorText {
+  color: #ef4444 !important;
+}
+
+.tf-auth__footer {
+  text-align: center;
+  font-size: 14px;
+  color: #9196a0;
+}
+
+.tf-auth__link {
+  color: #7170ff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.tf-auth__link:hover {
+  color: #5f5ee6;
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .tf-auth__card {
+    padding: 24px;
+  }
+
+  .tf-auth__title {
+    font-size: 24px;
+  }
+}

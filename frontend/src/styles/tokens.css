@@ -1,0 +1,245 @@
+/**
+ * TASKFLOW Design Tokens
+ * 
+ * Hybrid system combining:
+ * - Linear's dark-mode precision (app interface)
+ * - Notion's warm approachability (auth pages)
+ * - Vercel's shadow-as-border technique
+ * 
+ * Usage: var(--token-name)
+ */
+
+:root {
+  /* ============================================
+     BRAND COLORS
+     ============================================ */
+  --brand-primary: #7170ff;
+  --brand-primary-hover: #828fff;
+  --brand-primary-active: #5e6ad2;
+  --brand-primary-subtle: rgba(113, 112, 255, 0.1);
+  
+  /* ============================================
+     LIGHT THEME (Auth pages, onboarding)
+     Inspired by Notion's warm minimalism
+     ============================================ */
+  --light-bg-primary: #ffffff;
+  --light-bg-secondary: #f6f5f4;
+  --light-bg-tertiary: #f3f4f5;
+  
+  --light-text-primary: rgba(0, 0, 0, 0.95);
+  --light-text-secondary: #615d59;
+  --light-text-tertiary: #a39e98;
+  --light-text-disabled: #c4c1bb;
+  
+  --light-border-primary: rgba(0, 0, 0, 0.1);
+  --light-border-secondary: rgba(0, 0, 0, 0.05);
+  --light-border-focus: #097fe8;
+  
+  --light-shadow-card: 
+    rgba(0, 0, 0, 0.04) 0px 4px 18px,
+    rgba(0, 0, 0, 0.027) 0px 2.025px 7.84688px,
+    rgba(0, 0, 0, 0.02) 0px 0.8px 2.925px,
+    rgba(0, 0, 0, 0.01) 0px 0.175px 1.04062px;
+  
+  --light-shadow-elevated:
+    rgba(0, 0, 0, 0.01) 0px 1px 3px,
+    rgba(0, 0, 0, 0.02) 0px 3px 7px,
+    rgba(0, 0, 0, 0.02) 0px 7px 15px,
+    rgba(0, 0, 0, 0.04) 0px 14px 28px,
+    rgba(0, 0, 0, 0.05) 0px 23px 52px;
+  
+  --light-input-bg: #ffffff;
+  --light-input-border: #dddddd;
+  --light-input-focus: #097fe8;
+  
+  /* ============================================
+     DARK THEME (App interface)
+     Inspired by Linear's dark-mode-first design
+     ============================================ */
+  --dark-bg-canvas: #08090a;
+  --dark-bg-panel: #0f1011;
+  --dark-bg-surface: #191a1b;
+  --dark-bg-elevated: #28282c;
+  --dark-bg-hover: rgba(255, 255, 255, 0.05);
+  --dark-bg-active: rgba(255, 255, 255, 0.08);
+  
+  --dark-text-primary: #f7f8f8;
+  --dark-text-secondary: #d0d6e0;
+  --dark-text-tertiary: #8a8f98;
+  --dark-text-quaternary: #62666d;
+  
+  --dark-border-primary: rgba(255, 255, 255, 0.08);
+  --dark-border-secondary: rgba(255, 255, 255, 0.05);
+  --dark-border-focus: #7170ff;
+  
+  /* Vercel-style shadow-as-border for dark theme */
+  --dark-shadow-border: rgba(0, 0, 0, 0.2) 0px 0px 0px 1px;
+  --dark-shadow-card:
+    rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.2) 0px 0px 0px 1px;
+  --dark-shadow-elevated:
+    rgba(0, 0, 0, 0) 0px 8px 2px,
+    rgba(0, 0, 0, 0.01) 0px 5px 2px,
+    rgba(0, 0, 0, 0.04) 0px 3px 2px,
+    rgba(0, 0, 0, 0.07) 0px 1px 1px,
+    rgba(0, 0, 0, 0.08) 0px 0px 1px;
+  --dark-shadow-inset: rgba(0, 0, 0, 0.2) 0px 0px 12px 0px inset;
+  
+  /* ============================================
+     STATUS COLORS (Both themes)
+     ============================================ */
+  --status-success: #27a644;
+  --status-success-bg: rgba(39, 166, 68, 0.1);
+  --status-warning: #f59e0b;
+  --status-warning-bg: rgba(245, 158, 11, 0.1);
+  --status-error: #ef4444;
+  --status-error-bg: rgba(239, 68, 68, 0.1);
+  --status-info: #3b82f6;
+  --status-info-bg: rgba(59, 130, 246, 0.1);
+  
+  /* ============================================
+     SPACING SYSTEM (8px base)
+     ============================================ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  
+  /* ============================================
+     BORDER RADIUS
+     ============================================ */
+  --radius-micro: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-full: 9999px;
+  
+  /* ============================================
+     TYPOGRAPHY
+     Inspired by Linear's Inter Variable system
+     ============================================ */
+  --font-sans: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', 
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 
+    'Helvetica Neue', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', 
+    ui-monospace, SFMono-Regular, 'Menlo', 'Consolas', monospace;
+  
+  /* Font sizes */
+  --text-xs: 0.6875rem;    /* 11px */
+  --text-sm: 0.8125rem;    /* 13px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg: 1.125rem;     /* 18px */
+  --text-xl: 1.25rem;      /* 20px */
+  --text-2xl: 1.5rem;      /* 24px */
+  --text-3xl: 2rem;        /* 32px */
+  --text-4xl: 3rem;        /* 48px */
+  
+  /* Line heights */
+  --leading-tight: 1.0;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.6;
+  
+  /* Letter spacing (Linear-style negative tracking) */
+  --tracking-tightest: -1.584px;  /* 72px display */
+  --tracking-tighter: -1.056px;   /* 48px display */
+  --tracking-tight: -0.704px;     /* 32px heading */
+  --tracking-slight: -0.24px;     /* 20px subheading */
+  --tracking-normal: 0;
+  
+  /* ============================================
+     TRANSITIONS
+     ============================================ */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* ============================================
+     Z-INDEX SCALE
+     ============================================ */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+}
+
+/* ============================================
+     BASE STYLES
+     ============================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+  color: var(--dark-text-primary);
+  background-color: var(--dark-bg-canvas);
+  overflow-x: hidden;
+}
+
+/* Enable OpenType features for Linear-style typography */
+body {
+  font-feature-settings: 'cv01', 'ss03', 'liga', 'kern';
+}
+
+code, pre, kbd {
+  font-family: var(--font-mono);
+  font-feature-settings: 'liga', 'kern';
+}
+
+/* Focus visible for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--brand-primary);
+  color: white;
+}
+
+/* Scrollbar styling (dark theme) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--dark-border-primary);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dark-text-quaternary);
+}

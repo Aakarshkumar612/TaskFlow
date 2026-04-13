@@ -1,0 +1,115 @@
+/* Input Styles */
+
+.tf-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.tf-input__label {
+  font-size: var(--text-sm);
+  font-weight: 510;
+  color: var(--dark-text-secondary);
+  font-feature-settings: 'cv01', 'ss03';
+}
+
+.tf-input__container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tf-input {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 400;
+  color: var(--dark-text-primary);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--dark-border-primary);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  font-feature-settings: 'cv01', 'ss03';
+}
+
+.tf-input::placeholder {
+  color: var(--dark-text-tertiary);
+}
+
+.tf-input:hover:not(:disabled):not(:focus) {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.tf-input:focus {
+  outline: none;
+  border-color: var(--brand-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tf-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tf-input--error {
+  border-color: #ef4444;
+}
+
+.tf-input--error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.tf-input__icon--left,
+.tf-input__icon--right {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  color: var(--dark-text-tertiary);
+  pointer-events: none;
+}
+
+.tf-input__icon--left {
+  left: 12px;
+}
+
+.tf-input__icon--right {
+  right: 12px;
+  pointer-events: auto;
+}
+
+.tf-input:has(~ .tf-input__icon--left) {
+  padding-left: 36px;
+}
+
+.tf-input:has(~ .tf-input__icon--right) {
+  padding-right: 36px;
+}
+
+.tf-input__spinner {
+  position: absolute;
+  right: 12px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--dark-text-tertiary);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: tf-spin 0.6s linear infinite;
+}
+
+@keyframes tf-spin {
+  to { transform: rotate(360deg); }
+}
+
+.tf-input__helper {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--dark-text-tertiary);
+  line-height: 1.4;
+}
+
+.tf-input__helper--error {
+  color: #ef4444;
+}

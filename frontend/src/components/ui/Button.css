@@ -1,0 +1,120 @@
+/* Button Styles - Linear-style dark theme */
+
+.tf-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-weight: 510;
+  font-feature-settings: 'cv01', 'ss03';
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.tf-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Sizes */
+.tf-button--sm {
+  padding: 6px 12px;
+  font-size: var(--text-xs);
+}
+
+.tf-button--md {
+  padding: 8px 16px;
+  font-size: var(--text-sm);
+}
+
+.tf-button--lg {
+  padding: 12px 24px;
+  font-size: var(--text-base);
+}
+
+/* Variants */
+.tf-button--primary {
+  background: var(--brand-primary);
+  color: white;
+}
+
+.tf-button--primary:hover:not(:disabled) {
+  background: var(--brand-primary-hover);
+}
+
+.tf-button--primary:active:not(:disabled) {
+  background: var(--brand-primary-active);
+}
+
+.tf-button--secondary {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--dark-text-primary);
+  border-color: var(--dark-border-primary);
+}
+
+.tf-button--secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.tf-button--ghost {
+  background: transparent;
+  color: var(--dark-text-secondary);
+}
+
+.tf-button--ghost:hover:not(:disabled) {
+  background: var(--dark-bg-hover);
+  color: var(--dark-text-primary);
+}
+
+.tf-button--danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.tf-button--danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* Loading state */
+.tf-button--loading {
+  position: relative;
+  color: transparent;
+}
+
+.tf-button__spinner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: tf-spin 0.6s linear infinite;
+}
+
+@keyframes tf-spin {
+  to { transform: rotate(360deg); }
+}
+
+.tf-button__content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.tf-button__icon--left,
+.tf-button__icon--right {
+  display: flex;
+  align-items: center;
+}
+
+/* Focus visible */
+.tf-button:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+}

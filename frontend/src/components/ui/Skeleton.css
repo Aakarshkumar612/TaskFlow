@@ -1,0 +1,48 @@
+/* Skeleton Styles */
+
+.tf-skeleton {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  background-size: 200% 100%;
+  border-radius: var(--radius-sm);
+}
+
+.tf-skeleton--pulse {
+  animation: tf-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes tf-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.tf-skeleton--wave {
+  animation: tf-skeleton-wave 1.5s ease-in-out infinite;
+}
+
+@keyframes tf-skeleton-wave {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.tf-skeleton--circular {
+  border-radius: 50%;
+}
+
+.tf-skeleton-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tf-skeleton-card {
+  background: var(--dark-bg-surface);
+  border: 1px solid var(--dark-border-primary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
