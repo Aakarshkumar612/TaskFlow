@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TASKFLOW - System Design Overview</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1011;
+            --bg-secondary: #191a1b;
+            --bg-accent: #1e3a5f;
+            --bg-purple: #2d1b4e;
+            --text-primary: #f7f8f8;
+            --text-secondary: #9196a0;
+            --accent-blue: #7170ff;
+            --accent-purple: #a78bfa;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Section Backgrounds */
+        .section-dark {
+            background: linear-gradient(180deg, #0f1011 0%, #141516 100%);
+        }
+
+        .section-blue {
+            background: linear-gradient(180deg, #1e3a5f 0%, #0f1011 100%);
+        }
+
+        .section-purple {
+            background: linear-gradient(180deg, #2d1b4e 0%, #0f1011 100%);
+        }
+
+        .section-gradient {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d1b4e 50%, #0f1011 100%);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(113, 112, 255, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(113, 112, 255, 0.1);
+            border: 1px solid rgba(113, 112, 255, 0.3);
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--accent-blue);
+            margin-bottom: 32px;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #f7f8f8 0%, #7170ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 48px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 64px;
+            margin-top: 48px;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--accent-blue);
+        }
+
+        .hero-stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            margin-bottom: 64px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(113, 112, 255, 0.1);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-blue);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .section-description {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 700px;
+        }
+
+        /* Architecture Diagram */
+        .architecture-diagram {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 48px;
+            margin-bottom: 48px;
+        }
+
+        .diagram-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+
+        .diagram-node {
+            background: linear-gradient(135deg, rgba(113, 112, 255, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
+            border: 1px solid rgba(113, 112, 255, 0.3);
+            border-radius: 12px;
+            padding: 24px 32px;
+            text-align: center;
+            min-width: 160px;
+            transition: all 0.3s;
+        }
+
+        .diagram-node:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
+        }
+
+        .diagram-node-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .diagram-node-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .diagram-node-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .diagram-arrow {
+            font-size: 24px;
+            color: var(--accent-blue);
+        }
+
+        /* Tech Stack Grid */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .tech-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .tech-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .tech-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .tech-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .tech-card-icon.blue { background: rgba(113, 112, 255, 0.2); }
+        .tech-card-icon.green { background: rgba(16, 185, 129, 0.2); }
+        .tech-card-icon.orange { background: rgba(245, 158, 11, 0.2); }
+        .tech-card-icon.purple { background: rgba(167, 139, 250, 0.2); }
+        .tech-card-icon.red { background: rgba(239, 68, 68, 0.2); }
+
+        .tech-card-title {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .tech-card-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .tech-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tech-list-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .tech-list-item::before {
+            content: '✓';
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        /* System Design Boxes */
+        .design-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+        }
+
+        .design-box h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .design-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .design-item {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .design-item h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .design-item p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* API Table */
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+        }
+
+        .api-table th {
+            text-align: left;
+            padding: 16px;
+            background: rgba(113, 112, 255, 0.1);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+        }
+
+        .api-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .method-get { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .method-post { background: rgba(113, 112, 255, 0.2); color: var(--accent-blue); }
+        .method-put { background: rgba(245, 158, 11, 0.2); color: var(--accent-orange); }
+        .method-delete { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+
+        /* Database Schema */
+        .schema-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 32px;
+        }
+
+        .schema-table {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .schema-table-header {
+            padding: 12px 16px;
+            background: rgba(113, 112, 255, 0.1);
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .schema-table-fields {
+            padding: 12px 16px;
+        }
+
+        .schema-field {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .schema-field-name {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+        }
+
+        /* Flow Diagram */
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+
+        .flow-step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .flow-step-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .flow-step-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .flow-connector {
+            width: 2px;
+            height: 24px;
+            background: var(--accent-blue);
+            margin-left: 40px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 48px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 42px; }
+            .hero-stats { flex-direction: column; gap: 32px; }
+            .section-title { font-size: 32px; }
+            .diagram-flow { flex-direction: column; }
+            .diagram-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <section class="hero section-dark">
+        <div class="hero-badge">
+            <span>🚀</span>
+            <span>Full-Stack Application</span>
+        </div>
+        <h1>TASKFLOW</h1>
+        <p class="hero-subtitle">
+            A modern, scalable task management platform built with React, Node.js, PostgreSQL, and Clerk Authentication
+        </p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-value">354</div>
+                <div class="hero-stat-label">Files</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">95K+</div>
+                <div class="hero-stat-label">Lines of Code</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">8</div>
+                <div class="hero-stat-label">API Endpoints</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">7</div>
+                <div class="hero-stat-label">Database Tables</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TECH STACK SECTION (Blue Background) -->
+    <section class="section-blue">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Technology</span>
+                <h2 class="section-title">Tech Stack & Frameworks</h2>
+                <p class="section-description">
+                    A carefully selected stack of modern, production-ready technologies optimized for performance, scalability, and developer experience.
+                </p>
+            </div>
+
+            <div class="tech-grid">
+                <!-- Frontend -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-card-icon blue">⚛️</div>
+                        <div>
+                            <div class="tech-card-title">Frontend</div>
+                            <div class="tech-card-subtitle">Client-side application</div>
+                        </div>
+                    </div>
+                    <ul class="tech-list">
+                        <li>React 18 with TypeScript</li>
+                        <li>Vite (Build tool)</li>
+                        <li>React Router v6</li>
+                        <li>TanStack Query (React Query)</li>
+                        <li>Redux Toolkit</li>
+                        <li>Axios (HTTP client)</li>
+                        <li>React Hot Toast</li>
+                    </ul>
+                </div>
+
+                <!-- Backend -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-card-icon green">🟢</div>
+                        <div>
+                            <div class="tech-card-title">Backend</div>
+                            <div class="tech-card-subtitle">Server-side API</div>
+                        </div>
+                    </div>
+                    <ul class="tech-list">
+                        <li>Node.js 20 LTS</li>
+                        <li>Express.js 5</li>
+                        <li>TypeScript</li>
+                        <li>Prisma ORM</li>
+                        <li>WebSocket (ws)</li>
+                        <li>Morgan (Logger)</li>
+                        <li>Helmet (Security)</li>
+                    </ul>
+                </div>
+
+                <!-- Database -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-card-icon orange">🐘</div>
+                        <div>
+                            <div class="tech-card-title">Database</div>
+                            <div class="tech-card-subtitle">Data persistence</div>
+                        </div>
+                    </div>
+                    <ul class="tech-list">
+                        <li>PostgreSQL 16</li>
+                        <li>Prisma Schema</li>
+                        <li>CUID Primary Keys</li>
+                        <li>Indexed Queries</li>
+                        <li>Foreign Key Constraints</li>
+                        <li>JSON Metadata Fields</li>
+                    </ul>
+                </div>
+
+                <!-- Authentication -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-card-icon purple">🔐</div>
+                        <div>
+                            <div class="tech-card-title">Authentication</div>
+                            <div class="tech-card-subtitle">Security & identity</div>
+                        </div>
+                    </div>
+                    <ul class="tech-list">
+                        <li>Clerk (Auth provider)</li>
+                        <li>JWT Session Tokens</li>
+                        <li>Bcrypt Password Hashing</li>
+                        <li>OAuth (Google, GitHub)</li>
+                        <li>Auto-provisioning</li>
+                        <li>Session Management</li>
+                    </ul>
+                </div>
+
+                <!-- DevOps -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-card-icon red">🐳</div>
+                        <div>
+                            <div class="tech-card-title">DevOps & Tools</div>
+                            <div class="tech-card-subtitle">Infrastructure</div>
+                        </div>
+                    </div>
+                    <ul class="tech-list">
+                        <li>Docker & Docker Compose</li>
+                        <li>Nginx (Reverse proxy)</li>
+                        <li>Multi-stage Builds</li>
+                        <li>Health Checks</li>
+                        <li>Git Version Control</li>
+                        <li>GitHub Repository</li>
+                    </ul>
+                </div>
+
+                <!-- Libraries -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-card-icon blue">📦</div>
+                        <div>
+                            <div class="tech-card-title">Key Libraries</div>
+                            <div class="tech-card-subtitle">Dependencies</div>
+                        </div>
+                    </div>
+                    <ul class="tech-list">
+                        <li>CORS (Cross-origin)</li>
+                        <li>Compression (gzip)</li>
+                        <li>Express Rate Limiter</li>
+                        <li>Date-fns (Dates)</li>
+                        <li>Zod (Validation)</li>
+                        <li>React Icons</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HIGH LEVEL SYSTEM DESIGN (Purple Background) -->
+    <section class="section-purple">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Architecture</span>
+                <h2 class="section-title">High-Level System Design</h2>
+                <p class="section-description">
+                    The overall architecture showing how components interact, data flows through the system, and how services are orchestrated.
+                </p>
+            </div>
+
+            <!-- Architecture Diagram -->
+            <div class="architecture-diagram">
+                <h3 style="text-align: center; margin-bottom: 40px; font-size: 20px;">System Architecture Overview</h3>
+                
+                <div class="diagram-flow">
+                    <div class="diagram-node">
+                        <div class="diagram-node-icon">🌐</div>
+                        <div class="diagram-node-title">Browser</div>
+                        <div class="diagram-node-desc">React SPA</div>
+                    </div>
+                    <div class="diagram-arrow">→</div>
+                    <div class="diagram-node">
+                        <div class="diagram-node-icon">⚡</div>
+                        <div class="diagram-node-title">Nginx</div>
+                        <div class="diagram-node-desc">Port 3000</div>
+                    </div>
+                    <div class="diagram-arrow">→</div>
+                    <div class="diagram-node">
+                        <div class="diagram-node-icon"></div>
+                        <div class="diagram-node-title">Express API</div>
+                        <div class="diagram-node-desc">Port 5000</div>
+                    </div>
+                    <div class="diagram-arrow">→</div>
+                    <div class="diagram-node">
+                        <div class="diagram-node-icon">🐘</div>
+                        <div class="diagram-node-title">PostgreSQL</div>
+                        <div class="diagram-node-desc">Port 5432</div>
+                    </div>
+                </div>
+
+                <div class="diagram-flow" style="margin-top: 32px;">
+                    <div class="diagram-node" style="border-color: rgba(167, 139, 250, 0.3);">
+                        <div class="diagram-node-icon">🔐</div>
+                        <div class="diagram-node-title">Clerk</div>
+                        <div class="diagram-node-desc">Auth Service</div>
+                    </div>
+                    <div class="diagram-arrow">↔</div>
+                    <div class="diagram-node" style="border-color: rgba(16, 185, 129, 0.3);">
+                        <div class="diagram-node-icon">🔄</div>
+                        <div class="diagram-node-title">WebSocket</div>
+                        <div class="diagram-node-desc">Real-time</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- High Level Components -->
+            <div class="design-box">
+                <h3>🏗️ Core System Components</h3>
+                <div class="design-grid">
+                    <div class="design-item">
+                        <h4>Client Layer</h4>
+                        <p>React SPA with Vite, served via Nginx. Handles routing, state management, and API communication with automatic token attachment.</p>
+                    </div>
+                    <div class="design-item">
+                        <h4>API Gateway</h4>
+                        <p>Express.js server with middleware pipeline: CORS, Helmet, compression, logging, authentication, and error handling.</p>
+                    </div>
+                    <div class="design-item">
+                        <h4>Auth Layer</h4>
+                        <p>Clerk integration with JWT verification, auto-provisioning middleware that syncs Clerk users to PostgreSQL on first login.</p>
+                    </div>
+                    <div class="design-item">
+                        <h4>Data Layer</h4>
+                        <p>PostgreSQL with Prisma ORM. Type-safe queries, migrations, and relationship management across 7 interconnected tables.</p>
+                    </div>
+                    <div class="design-item">
+                        <h4>Real-time Layer</h4>
+                        <p>WebSocket service for live updates on task changes, notifications, and team collaboration events.</p>
+                    </div>
+                    <div class="design-item">
+                        <h4>Containerization</h4>
+                        <p>Docker Compose orchestrates 3 services: PostgreSQL, Backend API, and Frontend with Nginx, with health checks and volume persistence.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Flow -->
+            <div class="design-box">
+                <h3>🔄 Request Flow</h3>
+                <div class="flow-container">
+                    <div class="flow-step">
+                        <div class="flow-step-number">1</div>
+                        <div class="flow-step-content">
+                            <h4>User Authentication</h4>
+                            <p>Browser → Clerk → JWT Token → Stored in session</p>
+                        </div>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">
+                        <div class="flow-step-number">2</div>
+                        <div class="flow-step-content">
+                            <h4>API Request</h4>
+                            <p>Frontend attaches Bearer token → Sends to Express API</p>
+                        </div>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">
+                        <div class="flow-step-number">3</div>
+                        <div class="flow-step-content">
+                            <h4>Middleware Processing</h4>
+                            <p>CORS → Helmet → Auth Verification → User Provisioning</p>
+                        </div>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">
+                        <div class="flow-step-number">4</div>
+                        <div class="flow-step-content">
+                            <h4>Database Query</h4>
+                            <p>Prisma ORM executes type-safe SQL → PostgreSQL returns data</p>
+                        </div>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">
+                        <div class="flow-step-number">5</div>
+                        <div class="flow-step-content">
+                            <h4>Response & Real-time</h4>
+                            <p>JSON response sent → WebSocket broadcasts update to connected clients</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOW LEVEL SYSTEM DESIGN (Dark Background) -->
+    <section class="section-dark">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Implementation</span>
+                <h2 class="section-title">Low-Level System Design</h2>
+                <p class="section-description">
+                    Detailed implementation patterns, database schema, API endpoints, and code organization showing how each component works internally.
+                </p>
+            </div>
+
+            <!-- Database Schema -->
+            <div class="design-box">
+                <h3>🗄️ Database Schema (Prisma)</h3>
+                <div class="schema-diagram">
+                    <div class="schema-table">
+                        <div class="schema-table-header">👤 User</div>
+                        <div class="schema-table-fields">
+                            <div class="schema-field"><span class="schema-field-name">id</span> <span>CUID (PK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">name</span> <span>String</span></div>
+                            <div class="schema-field"><span class="schema-field-name">email</span> <span>String (Unique)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">avatar_url</span> <span>String?</span></div>
+                            <div class="schema-field"><span class="schema-field-name">timezone</span> <span>String</span></div>
+                            <div class="schema-field"><span class="schema-field-name">created_at</span> <span>DateTime</span></div>
+                            <div class="schema-field"><span class="schema-field-name">updated_at</span> <span>DateTime</span></div>
+                        </div>
+                    </div>
+                    <div class="schema-table">
+                        <div class="schema-table-header">👥 Team</div>
+                        <div class="schema-table-fields">
+                            <div class="schema-field"><span class="schema-field-name">id</span> <span>CUID (PK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">name</span> <span>String</span></div>
+                            <div class="schema-field"><span class="schema-field-name">description</span> <span>String?</span></div>
+                            <div class="schema-field"><span class="schema-field-name">owner_id</span> <span>String (FK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">visibility</span> <span>String</span></div>
+                            <div class="schema-field"><span class="schema-field-name">created_at</span> <span>DateTime</span></div>
+                        </div>
+                    </div>
+                    <div class="schema-table">
+                        <div class="schema-table-header">📁 Project</div>
+                        <div class="schema-table-fields">
+                            <div class="schema-field"><span class="schema-field-name">id</span> <span>CUID (PK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">name</span> <span>String</span></div>
+                            <div class="schema-field"><span class="schema-field-name">team_id</span> <span>String (FK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">owner_id</span> <span>String (FK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">status</span> <span>String</span></div>
+                            <div class="schema-field"><span class="schema-field-name">color</span> <span>String</span></div>
+                            <div class="schema-field"><span class="schema-field-name">start_date</span> <span>String?</span></div>
+                            <div class="schema-field"><span class="schema-field-name">due_date</span> <span>String?</span></div>
+                        </div>
+                    </div>
+                    <div class="schema-table">
+                        <div class="schema-table-header">✅ Task</div>
+                        <div class="schema-table-fields">
+                            <div class="schema-field"><span class="schema-field-name">id</span> <span>CUID (PK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">title</span> <span>String</span></div>
+                            <div class="schema-field"><span class="schema-field-name">project_id</span> <span>String (FK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">assignee_id</span> <span>String? (FK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">status</span> <span>String</span></div>
+                            <div class="schema-field"><span class="schema-field-name">priority</span> <span>String</span></div>
+                            <div class="schema-field"><span class="schema-field-name">position</span> <span>Int</span></div>
+                            <div class="schema-field"><span class="schema-field-name">tags</span> <span>JSON</span></div>
+                        </div>
+                    </div>
+                    <div class="schema-table">
+                        <div class="schema-table-header">📝 Comment</div>
+                        <div class="schema-table-fields">
+                            <div class="schema-field"><span class="schema-field-name">id</span> <span>CUID (PK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">content</span> <span>String</span></div>
+                            <div class="schema-field"><span class="schema-field-name">task_id</span> <span>String (FK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">user_id</span> <span>String (FK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">edited_at</span> <span>DateTime?</span></div>
+                        </div>
+                    </div>
+                    <div class="schema-table">
+                        <div class="schema-table-header">🔔 Notification</div>
+                        <div class="schema-table-fields">
+                            <div class="schema-field"><span class="schema-field-name">id</span> <span>CUID (PK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">user_id</span> <span>String (FK)</span></div>
+                            <div class="schema-field"><span class="schema-field-name">type</span> <span>String</span></div>
+                            <div class="schema-field"><span class="schema-field-name">message</span> <span>String</span></div>
+                            <div class="schema-field"><span class="schema-field-name">is_read</span> <span>Boolean</span></div>
+                            <div class="schema-field"><span class="schema-field-name">metadata</span> <span>JSON?</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Endpoints -->
+            <div class="design-box">
+                <h3> REST API Endpoints</h3>
+                <table class="api-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Endpoint</th>
+                            <th>Description</th>
+                            <th>Auth</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="method-badge method-get">GET</span></td>
+                            <td><code>/health</code></td>
+                            <td>Health check with WS client count</td>
+                            <td>❌ Public</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge method-get">GET</span></td>
+                            <td><code>/api/v1/tasks</code></td>
+                            <td>List all tasks with pagination & filtering</td>
+                            <td>✅ Required</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge method-post">POST</span></td>
+                            <td><code>/api/v1/tasks</code></td>
+                            <td>Create a new task</td>
+                            <td>✅ Required</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge method-get">GET</span></td>
+                            <td><code>/api/v1/tasks/:id</code></td>
+                            <td>Get task by ID with comments</td>
+                            <td>✅ Required</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge method-put">PUT</span></td>
+                            <td><code>/api/v1/tasks/:id</code></td>
+                            <td>Update task fields</td>
+                            <td>✅ Required</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge method-delete">DELETE</span></td>
+                            <td><code>/api/v1/tasks/:id</code></td>
+                            <td>Delete a task</td>
+                            <td>✅ Required</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge method-post">POST</span></td>
+                            <td><code>/api/v1/projects</code></td>
+                            <td>Create project with team association</td>
+                            <td>✅ Required</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge method-post">POST</span></td>
+                            <td><code>/api/v1/teams</code></td>
+                            <td>Create team (auto-assigns owner)</td>
+                            <td>✅ Required</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge method-put">PUT</span></td>
+                            <td><code>/api/v1/notifications/:id/read</code></td>
+                            <td>Mark notification as read</td>
+                            <td>✅ Required</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Project Structure -->
+            <div class="design-box">
+                <h3>📂 Project Structure</h3>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 2; color: var(--text-secondary);">
+                    <div><span style="color: var(--accent-blue);">📁 T-M/</span></div>
+                    <div style="padding-left: 20px;">├── <span style="color: var(--accent-green);">📁 backend/</span> <span style="color: var(--text-secondary);"># Express + Prisma API</span></div>
+                    <div style="padding-left: 40px;">├── <span style="color: var(--accent-orange);">📁 src/</span></div>
+                    <div style="padding-left: 60px;">├── controllers/ <span style="color: var(--text-secondary);"># Business logic</span></div>
+                    <div style="padding-left: 60px;">├── middleware/ <span style="color: var(--text-secondary);"># Auth, errors, logging</span></div>
+                    <div style="padding-left: 60px;">├── routes/ <span style="color: var(--text-secondary);"># Route definitions</span></div>
+                    <div style="padding-left: 60px;">├── websocket/ <span style="color: var(--text-secondary);"># Real-time service</span></div>
+                    <div style="padding-left: 60px;">└── server.ts <span style="color: var(--text-secondary);"># Express app entry</span></div>
+                    <div style="padding-left: 40px;">└── <span style="color: var(--accent-purple);">📁 prisma/</span> <span style="color: var(--text-secondary);"># Database schema</span></div>
+                    <div style="padding-left: 20px;">└── <span style="color: var(--accent-green);">📁 frontend/</span> <span style="color: var(--text-secondary);"># React + Vite SPA</span></div>
+                    <div style="padding-left: 40px;">├── <span style="color: var(--accent-orange);">📁 src/</span></div>
+                    <div style="padding-left: 60px;">├── components/ <span style="color: var(--text-secondary);"># Reusable UI</span></div>
+                    <div style="padding-left: 60px;">├── features/ <span style="color: var(--text-secondary);"># Feature modules</span></div>
+                    <div style="padding-left: 60px;">├── hooks/ <span style="color: var(--text-secondary);"># React Query hooks</span></div>
+                    <div style="padding-left: 60px;">├── services/ <span style="color: var(--text-secondary);"># API clients</span></div>
+                    <div style="padding-left: 60px;">├── store/ <span style="color: var(--text-secondary);"># Redux slices</span></div>
+                    <div style="padding-left: 60px;">└── types/ <span style="color: var(--text-secondary);"># TypeScript types</span></div>
+                    <div style="padding-left: 20px;">├── <span style="color: var(--accent-blue);">🐳 docker-compose.yml</span></div>
+                    <div style="padding-left: 20px;">├── <span style="color: var(--accent-blue);">📄 Dockerfile (backend)</span></div>
+                    <div style="padding-left: 20px;">├── <span style="color: var(--accent-blue);">📄 Dockerfile (frontend)</span></div>
+                    <div style="padding-left: 20px;">└── <span style="color: var(--accent-blue);">📄 README.md</span></div>
+                </div>
+            </div>
+
+            <!-- Authentication Flow -->
+            <div class="design-box">
+                <h3>🔐 Authentication Flow</h3>
+                <div class="flow-container">
+                    <div class="flow-step">
+                        <div class="flow-step-number">1</div>
+                        <div class="flow-step-content">
+                            <h4>User Signs Up/Logs In</h4>
+                            <p>Clerk handles authentication → Returns JWT session token</p>
+                        </div>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">
+                        <div class="flow-step-number">2</div>
+                        <div class="flow-step-content">
+                            <h4>Token Storage</h4>
+                            <p>Token stored in browser session → Available via Clerk's getToken()</p>
+                        </div>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">
+                        <div class="flow-step-number">3</div>
+                        <div class="flow-step-content">
+                            <h4>API Request with Auth</h4>
+                            <p>Axios interceptor attaches Bearer token to every request header</p>
+                        </div>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">
+                        <div class="flow-step-number">4</div>
+                        <div class="flow-step-content">
+                            <h4>Backend Verification</h4>
+                            <p>Auth middleware verifies JWT → Extracts user ID → Checks/creates user in PostgreSQL</p>
+                        </div>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-step">
+                        <div class="flow-step-number">5</div>
+                        <div class="flow-step-content">
+                            <h4>Auto-Provisioning</h4>
+                            <p>If user doesn't exist in DB → Creates User record from Clerk data → Proceeds with request</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEPLOYMENT & DOCKER (Gradient Background) -->
+    <section class="section-gradient">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Deployment</span>
+                <h2 class="section-title">Docker & Deployment Architecture</h2>
+                <p class="section-description">
+                    Containerized deployment strategy with multi-stage builds, health checks, and service orchestration using Docker Compose.
+                </p>
+            </div>
+
+            <div class="design-box">
+                <h3>🐳 Docker Services</h3>
+                <div class="design-grid">
+                    <div class="design-item" style="border-left-color: var(--accent-green);">
+                        <h4>PostgreSQL (postgres:16-alpine)</h4>
+                        <p>Lightweight Alpine-based database. Persistent volume for data. Health check with pg_isready. Port 5432 exposed for external tools.</p>
+                    </div>
+                    <div class="design-item" style="border-left-color: var(--accent-blue);">
+                        <h4>Backend (node:20-slim)</h4>
+                        <p>Multi-stage build: deps → build → runner. Non-root user for security. Prisma auto-generated. Health check on /health endpoint. Port 5000.</p>
+                    </div>
+                    <div class="design-item" style="border-left-color: var(--accent-orange);">
+                        <h4>Frontend (nginx:1.25-alpine)</h4>
+                        <p>React built with Vite → Served by Nginx. SPA routing configured. Gzip compression enabled. Security headers. Port 3000 → 80.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="design-box">
+                <h3>🚀 Deployment Commands</h3>
+                <div style="background: var(--bg-primary); padding: 24px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 2;">
+                    <div><span style="color: var(--text-secondary);"># Start all services</span></div>
+                    <div><span style="color: var(--accent-green);">docker compose up -d</span></div>
+                    <div style="margin-top: 12px;"><span style="color: var(--text-secondary);"># View logs</span></div>
+                    <div><span style="color: var(--accent-green);">docker compose logs -f</span></div>
+                    <div style="margin-top: 12px;"><span style="color: var(--text-secondary);"># Run database migrations</span></div>
+                    <div><span style="color: var(--accent-green);">docker compose exec backend npx prisma db push</span></div>
+                    <div style="margin-top: 12px;"><span style="color: var(--text-secondary);"># Stop services</span></div>
+                    <div><span style="color: var(--accent-green);">docker compose down</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>
+            <strong>TASKFLOW</strong> — Built with ❤️ by Aakarsh Kumar<br>
+            <span style="color: var(--text-secondary);">Full-Stack Developer | React • Node.js • PostgreSQL • Docker</span><br>
+            <a href="https://github.com/Aakarshkumar612/TaskFlow" style="color: var(--accent-blue); text-decoration: none;">
+                github.com/Aakarshkumar612/TaskFlow
+            </a>
+        </p>
+    </footer>
+
+</body>
+</html>
