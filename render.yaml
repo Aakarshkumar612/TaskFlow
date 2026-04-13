@@ -36,13 +36,10 @@ services:
     branch: main
     rootDir: frontend
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    publishPath: dist
     envVars:
       - key: VITE_API_BASE_URL
-        fromService:
-          name: taskflow-backend
-          type: web
-          property: url
+        sync: false
       - key: VITE_CLERK_PUBLISHABLE_KEY
         sync: false
 
@@ -53,3 +50,4 @@ services:
     name: taskflow-db
     plan: free
     region: oregon
+    ipAllowList: []
