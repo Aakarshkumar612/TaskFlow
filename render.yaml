@@ -32,7 +32,6 @@ services:
   - type: web
     name: taskflow-frontend
     runtime: static
-    region: oregon
     plan: free
     branch: main
     rootDir: frontend
@@ -43,8 +42,7 @@ services:
         fromService:
           name: taskflow-backend
           type: web
-          property: host
-          envVarKey: BACKEND_HOST
+          property: url
       - key: VITE_CLERK_PUBLISHABLE_KEY
         sync: false
 
@@ -55,4 +53,3 @@ services:
     name: taskflow-db
     plan: free
     region: oregon
-    ipAllowList: []
